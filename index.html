@@ -18,7 +18,10 @@
     </div>
     <div class ="header">
         <h1>Sunny_ZY's Personal Website</h1>
+        <p id ="IP" style="font-size: 1vw; left:1vw;top:1vw;">123123</p>
+
     </div>
+        
 
   <div class="fortune">
     <script>
@@ -74,9 +77,12 @@
 
       <script src="linkControl.js"></script>
 -->       
+    <script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script>
         updateClockHands();// 初始更新指针角度
         setInterval(updateClockHands, 1000);// 每隔1秒更新一次时钟指针
+        var ip=document.getElementById("IP");
+        ip.innerHTML="Your IP:"+returnCitySN["cip"]+'<br> located in:'+returnCitySN["cname"];
     </script>
 </body>
 
