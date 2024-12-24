@@ -1,0 +1,21 @@
+.header {
+    width: 70vw;
+    margin:0 auto;
+    background-color: #004fb6d9;
+    height: 7vw;
+    text-align: center;
+    color: #81fa76;
+}
+.header h1 {
+    font-size: 3vw;
+    padding-top: 1vw;
+    font-weight: bold;
+}
+.button-set {
+    position:absolute;
+    right:1vw;
+    top:1vw;
+}
+.user-info {
+    padding-left:25vw;
+}
