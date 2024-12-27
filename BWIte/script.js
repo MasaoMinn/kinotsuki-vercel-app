@@ -31,7 +31,7 @@ function generateRandomGrid() {
     let initialGrid = Array(64).fill('white');
     
     // 随机进行若干次翻转操作
-    const numFlips = Math.floor(Math.random() * 10) + 5; // 随机进行5-14次翻转
+    const numFlips = Math.floor(Math.random() * 10) + 6; // 随机进行6-15次翻转
     for (let i = 0; i < numFlips; i++) {
         const index = Math.floor(Math.random() * 64);
         toggleCellColor(initialGrid, index,false);
@@ -111,11 +111,11 @@ function timerStart() {
 }
 
 function formatTime(milliseconds) {
+    const minutes = Math.floor(milliseconds / (1000 * 60));
     const seconds = Math.floor((milliseconds % (1000 * 60)) / 1000);
     const millisecondsPart = milliseconds % 1000;
-    return `${seconds < 10 ? '0' + seconds : seconds}.${millisecondsPart}`;
+    return `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}.${millisecondsPart}`;
 }
-
 function checkWin() {
     if (leftGridColors.toString() === rightGridColors.toString()) {
         alert('游戏胜利！ 用时' + formatTime(new Date().getTime() - startTime) + '秒。');
