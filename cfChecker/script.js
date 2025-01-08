@@ -52,6 +52,36 @@ change_user_btn.addEventListener("click",function() {
     load_user();
 });
 
+function update_contest_list(contest_list) {
+    var cur=0;while(contest_list[cur].phase!="FINISHED") cur++;
+    var clist=document.getElementById("clist");
+    for(var i=0;i<5;i++,cur++) {
+        var lnk=document.createElement("a");
+        var item=document.createElement("li");
+        item.className="list-group-item d-flex justify-content-between align-items-start";
+        item.innerHTML="<div class='ms-2 me-auto'><div class='fw-bold'>"+contest_list[cur].name+"</div>";
+        item.innerHTML+=contest_list[cur].relativeTimeSeconds;
+        lnk.appendChild(item);
+        lnk.href="https://codeforces.com/contest/"+contest_list[cur].id;
+        clist.appendChild(lnk);
+    }
+}
+function load_contest() {
+    axios ({
+        url:"https://codeforces.com/api/contest.list",
+        method:"get",
+        params:{
+            gym: false
+        }
+    }).then(function(response) {
+        var contest_list=response.data.result;
+        update_contest_list(contest_list);
+    }).catch(function(error) {
+        alert(error);
+    });
+}
+
 window.onload = function() {
     load_user(); // 调用 load_user 函数
+    load_contest();
 };
