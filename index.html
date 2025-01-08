@@ -81,18 +81,6 @@
   <script>
     updateClockHands();// 初始更新指针角度
     setInterval(updateClockHands, 1000);// 每隔1秒更新一次时钟指针
-    var ip=document.getElementById("IP");
-    axios({
-      url: "https://2024.ipchaxun.com/",
-      method: "get"
-    }).then(function(response) {
-    console.log(response.data); // 检查实际返回的数据结构
-    if (response.data.ret === "OK") ip.innerHTML = response.data.ip + '<br>' + JSON.stringify(response.data.data);
-    else ip.innerHTML = "IP地址"+response.ret;
-    }).catch(function(error) {
-    console.error(error); // 打印错误信息以便调试
-    ip.innerHTML = "获取失败";
-  });
   </script>
 </body>
 
