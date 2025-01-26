@@ -1,4 +1,4 @@
-var user_name="Plutopro";
+var user_name="Sunny_ZY";
 
 function load_user() {
     axios ({
@@ -52,20 +52,36 @@ change_user_btn.addEventListener("click",function() {
     load_user();
 });
 
+function secToDate(sec) {
+    if(sec<86400) return Math.floor(sec/3600)+" hours ";
+    return Math.floor(sec/86400)+" days "+Math.floor((sec%86400)/3600)+" hours ";
+}
 function update_contest_list(contest_list) {
-    var cur=0;while(contest_list[cur].phase!="FINISHED") cur++;
-    var clist=document.getElementById("clist");
-    for(var i=0;i<5;i++,cur++) {
-        var lnk=document.createElement("a");
-        var item=document.createElement("li");
-        item.className="list-group-item d-flex justify-content-between align-items-start";
-        item.innerHTML="<div class='ms-2 me-auto'><div class='fw-bold'>"+contest_list[cur].name+"</div>";
-        item.innerHTML+=contest_list[cur].relativeTimeSeconds;
-        lnk.appendChild(item);
-        lnk.href="https://codeforces.com/contest/"+contest_list[cur].id;
-        clist.appendChild(lnk);
+    var clist=document.getElementById("upcoming-clist");
+    var cur=0;while(contest_list[cur].phase=="BEFORE") cur++;
+    for(var i=cur-1;i>=0;i--) {
+        var contest=document.createElement("div");
+        contest.className="row";
+        var cont=document.createElement("div");
+        cont.className="col";
+        var clnk=document.createElement("a");
+        clnk.href="https://codeforces.com/contest/"+contest_list[i].id;
+        clnk.innerHTML="<h5>"+contest_list[i].name+" </h5>";
+        cont.appendChild(clnk);
+        contest.appendChild(cont);
+
+        var ctime=document.createElement("div");
+        ctime.className="col";
+        ctime.innerText=secToDate(-contest_list[i].relativeTimeSeconds);
+        contest.appendChild(ctime);
+
+        contest.style.height="5vw";
+        contest.style.alignContent="center";
+        contest.style.backgroundColor="lightgrey";
+        clist.append(contest);
     }
 }
+
 function load_contest() {
     axios ({
         url:"https://codeforces.com/api/contest.list",
@@ -82,6 +98,7 @@ function load_contest() {
 }
 
 window.onload = function() {
+    update_user_name();
     load_user(); // 调用 load_user 函数
     load_contest();
 };
