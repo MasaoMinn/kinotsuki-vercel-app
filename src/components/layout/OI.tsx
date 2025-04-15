@@ -1,7 +1,7 @@
 import { Accordion } from "react-bootstrap"
 import { useTheme ,lightTheme,darkTheme } from "../boxed/ThemeProvider"
 
-export default () => {
+const OI = () => {
   const { theme } = useTheme();
     return (
       <div>
@@ -16,6 +16,7 @@ export default () => {
       </div>
     )
 }
+export default OI;
 function main() {
     return (
         <>

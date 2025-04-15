@@ -1,5 +1,5 @@
 "use client";
-import { Container,Row,Col, Form } from "react-bootstrap"
+import { Container,Row,Col } from "react-bootstrap"
 import { Button } from "react-bootstrap"
 import { useState } from "react";
 
@@ -36,7 +36,7 @@ export default () => {
             }
             while(degree[i]-->0) {
                 let len=Math.floor(Math.random() * size),cnt=0;
-                while(this.adj[i][(i + len) % size]&&cnt<size) len++,cnt++;
+                while(this.adj[i][(i + len) % size]&&cnt<size) {len++;cnt++;}
                 this.adj[i][(i + len) % size] = true;
                 this.adj[(i + len) % size][i] = true;
             }
@@ -84,7 +84,7 @@ export default () => {
         if(grid[pos]) return ;
         const vis: boolean[] = Array(size).fill(false);
         const queue: pair[] = [];
-        let newGrid=grid;
+        const newGrid=grid;
         queue.push([pos,0]);
         while(queue.length) {
           const cur=queue.shift()!;

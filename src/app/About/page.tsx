@@ -4,7 +4,7 @@ import { useTheme } from "@/components/boxed/ThemeProvider"
 import Image from "next/image"
 import { Container, Row,Col } from "react-bootstrap";
 import NextWordmark from "../../../public/Next_logo";
-export default () => {
+const About = () => {
     const { theme } = useTheme();
     return (
         <Container fluid style={{height :"100vh"}}>
@@ -17,3 +17,4 @@ export default () => {
         </Container>
     )
 }
+export default About;

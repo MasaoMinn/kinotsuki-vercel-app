@@ -1,10 +1,11 @@
 import Link from "next/link";
 
-export default () => {
+const page = () => {
     return (
       <>
         <Link href="/">Home</Link>
       </>
     );
-}
-  
+};
+
+export default page;

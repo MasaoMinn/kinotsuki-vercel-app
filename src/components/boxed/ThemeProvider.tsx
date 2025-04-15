@@ -60,6 +60,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       return systemDark ? "dark" : "light";
     } catch (e) {
       // localStorage 不可用时的回退方案
+      console.log(e);
       return "light";
     }
   }, []);
@@ -73,7 +74,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       try {
         localStorage.setItem("theme", newTheme);
       } catch (e) {
-        console.warn("Failed to persist theme preference");
+        console.warn(e);
       }
       return newTheme;
     });
@@ -90,6 +91,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           setTheme(e.matches ? "dark" : "light");
         }
       } catch (e) {
+        console.log(e);
         // 忽略 localStorage 错误
       }
     };

@@ -5,7 +5,7 @@ import Container from "react-bootstrap/Container";
 import { useTheme ,lightTheme ,darkTheme } from "@/components/boxed/ThemeProvider";
 import Rimage from "react-bootstrap/Image";
 import OI from "@/components/layout/OI";
-export default () => {
+const Main =() => {
   const { theme } = useTheme();
   return (
     <Container className="h-100 w-100 d-flex flex-column justify-content-center text-center align-items-center" style={theme==='light'? {...lightTheme,}:{...darkTheme}} fluid>
@@ -16,13 +16,13 @@ export default () => {
         </Col>
         <Col className="" style={{}}>
           <div className="" style={theme=="light"?{backgroundColor:"#F4FFC8",color:"#00211F"}:{backgroundColor:"#161712",color:"#D5FFFA"}}>
-            <h3>I'm <b>Masao Minn</b></h3>
+            <h3>I`m <b>Masao Minn</b></h3>
             <p></p>
             <p>by now a college sophomore from SCUT,major in software engineering.</p>
-            <p>I fell in love with C++ programming in high school,that's why I chose this major</p>
-            <p>I'm stydying React.js(Next.js) full-stack framework,This page is my first React product</p>
-            <p>I'm stydying English for TOFEL and Japanese for JLPT N2.I wacth Family Guy and Big Bang to improve my English accumulation</p>
-            <p>I'm planing to take further education in Tojyo,Japan,where I too a trip and it was amazing</p>
+            <p>I fell in love with C++ programming in high school,that`s why I chose this major</p>
+            <p>I`m stydying React.js(Next.js) full-stack framework,This page is my first React product</p>
+            <p>I`m stydying English for TOFEL and Japanese for JLPT N2.I wacth Family Guy and Big Bang to improve my English accumulation</p>
+            <p>I`m planing to take further education in Tojyo,Japan,where I too a trip and it was amazing</p>
             <p>In my free time,I write minigames or useful tools on WEB.I enjoy the sense of acheivement after completing a small project</p>
             <p>I like Pokemons.The monster on the left is a abstract kemono-styled blue fox which I regard as a virtual figure of mine</p>
             <p>my motto :<b>relax but not lying flat</b></p>
@@ -53,3 +53,4 @@ export default () => {
     </Container>
   );
 }
+export default Main;
