@@ -37,7 +37,7 @@ const Main =() => {
           <Stack gap={0}>
             <div className="p-1"><h4><b>小游戏</b></h4></div>
             <div className="hr" />
-            <div className="p-1"><Button href="/BWite/index.html" variant={theme} className="w-100">最强大脑-黑白迭代</Button></div>
+            <div className="p-1"><Button href="/BWIte/index.html" variant={theme} className="w-100">最强大脑-黑白迭代</Button></div>
             <div className="p-1"><Button href="/Color/index.html" variant={theme} className="w-100">我色感超6</Button></div>
             <div className="p-1"><Button href="/LightMaze" variant={theme} className="w-100">最强大脑-点灯新世界</Button></div>
           </Stack>
