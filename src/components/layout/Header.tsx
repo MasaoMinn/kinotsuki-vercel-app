@@ -23,7 +23,7 @@ function BasicExample() {
                 {`切换${theme === "light" ? "深色" : "浅色"}模式`}{theme === "light" ? "🌙" : "☀️"}
               </Button></NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="https://github.com/MasaoMinn/ACTracker">See me on Github</NavDropdown.Item>
+              <NavDropdown.Item href="https://github.com/MasaoMinn/MasaoMinn.github.io">See me on Github</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
