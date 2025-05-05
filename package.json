@@ -3,21 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js --turbopack",
+    "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
-    "lint": "next lint",
-    "prisma:gen": "prisma generate",
-    "prisma:migrate": "prisma migrate dev"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^6.5.0",
     "@types/react-bootstrap": "^0.32.37",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
     "next": "15.2.4",
-    "prisma": "^6.5.0",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
