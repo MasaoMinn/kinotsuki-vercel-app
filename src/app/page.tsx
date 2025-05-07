@@ -47,6 +47,7 @@ const Main =() => {
             <div className="p-2"><h4><b>实用工具</b></h4></div>
             <div className="hr" />
             <div className="p-2"><Button href="/" variant={theme} className="w-100">敬请期待</Button></div>
+            <div className="p-2"><Button href="/Furry" variant={theme} className="w-100">Furry扩列条</Button></div>
           </Stack>
         </Col>
       </Row>
