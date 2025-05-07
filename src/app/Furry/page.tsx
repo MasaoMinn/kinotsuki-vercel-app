@@ -4,7 +4,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 
-const QQProfileLink: React.FC<{ qqNumber: string }> = ({ qqNumber }) => {
+const QQProfileLink: React.FC = () => {
+  const qqNumber = '2134361910'; // 替换为你的QQ号
   const pcQQUrl = `https://user.qzone.qq.com/${qqNumber}`;// QQ空间主页URL
   const mobileQQUrl = `mqqapi://card/show_pslcard?src_type=internal&card_type=person&uin=${qqNumber}`; // 移动端QQ协议（部分浏览器支持）
   const handleClick = () => {
@@ -55,9 +56,5 @@ const QQProfileLink: React.FC<{ qqNumber: string }> = ({ qqNumber }) => {
   );
 };
 
-// 使用示例
-const ExampleUsage = () => (
-  <QQProfileLink qqNumber="2134361910" />
-);
 
 export default QQProfileLink;
