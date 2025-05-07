@@ -1,55 +1,89 @@
 "use client";
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row , Image, Accordion } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import Image from 'react-bootstrap/Image';
-
 const QQProfileLink: React.FC = () => {
-  const qqNumber = '2134361910'; // 替换为你的QQ号
-  const pcQQUrl = `https://user.qzone.qq.com/${qqNumber}`;// QQ空间主页URL
-  const mobileQQUrl = `mqqapi://card/show_pslcard?src_type=internal&card_type=person&uin=${qqNumber}`; // 移动端QQ协议（部分浏览器支持）
-  const handleClick = () => {
-    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    try {
-      if (isMobile) {
-        window.location.href = mobileQQUrl;// 尝试打开移动端协议
-        setTimeout(() => {
-          window.location.href = pcQQUrl;
-        }, 500);
-      } else {
-        window.open(pcQQUrl, '_blank', 'noopener,noreferrer');// 协议未生效时跳转网页版
-      }
-    } catch (e) {
-      console.error('跳转异常:', e);
-    }
-  };
-
+  const qqNumber = '2134361910'; // QQ号
+  const QQUrl = `https://qm.qq.com/q/QTfus78dqe`;// QQ主页URL
   return (
     <Container fluid className="text-center px-3" style={{ marginTop: '20px' }}>
   {/* 按钮行 - 移动端自动堆叠 */}
-  <Row className="justify-content-center g-3">
+  <Row className="justify-content-center g-1">
     <Col xs={12} md={6} className="d-flex justify-content-center">
-      <Button 
-        variant="primary" 
-        onClick={handleClick}
-        aria-label={`访问QQ：${qqNumber}`}
-        className="px-4 py-2"  // 增加按钮内边距
-      >
+      <Button variant="primary" href={QQUrl} aria-label={`访问QQ：${qqNumber}`} className="px-4 py-2" >
         点击跳转我的QQ
       </Button>
     </Col>
   </Row>
-
-  {/* 图片行 - 移动端自适应处理 */}
-  <Row className="mt-3 justify-content-center">
+  <Row className="mt-1 justify-content-center">
     <Col xs={10} md={6} lg={4}>
-      <Image 
-        src="QQ.jpg" 
-        alt="QQ二维码"
-        fluid  // 关键响应式属性
-        style={{ maxWidth: '300px', height: 'auto' }} // 限制最大宽度
-        className="img-thumbnail"  // 增加边框效果
-      />
+        <Accordion defaultActiveKey={null} flush className="my-3" style={{borderColor:"blue",borderWidth:"2px",borderStyle:"solid",borderRadius:"10px"}}>
+        <Accordion.Item eventKey="0">
+            <Accordion.Header>
+            <span className="text-primary me-2">
+                <i className="bi bi-chevron-down" />
+            </span>
+            查看QQ二维码
+            </Accordion.Header>
+            <Accordion.Body>
+                <Image src="QQ.jpg" alt="QQ二维码" fluid className="img-thumbnail hover-shadow"
+                    style={{ height: 'auto',transform: 'scale(0.98)',transition: 'transform 0.3s ease'}}
+                    onLoad={(e) => {e.currentTarget.style.transform = 'scale(1)'}}/>
+            </Accordion.Body>
+        </Accordion.Item>
+        </Accordion>
+    </Col>
+  </Row>
+  <Row className="justify-content-center g-1">
+    <Col xs={12} md={6} className="d-flex justify-content-center">
+      <Button variant="primary" href="https://www.xiaohongshu.com/user/profile/649132e3000000000f004dc5?xhsshare=userQrCode" aria-label={`访问小红书：5514710200`} className="px-4 py-2" >
+        点击跳转我的小红书
+      </Button>
+    </Col>
+  </Row>
+  <Row className="mt-1 justify-content-center">
+    <Col xs={10} md={6} lg={4}>
+        <Accordion defaultActiveKey={null} flush className="my-3" style={{borderColor:"blue",borderWidth:"2px",borderStyle:"solid",borderRadius:"10px"}}>
+        <Accordion.Item eventKey="0">
+            <Accordion.Header>
+            <span className="text-primary me-2">
+                <i className="bi bi-chevron-down" />
+            </span>
+            查看小红书二维码
+            </Accordion.Header>
+            <Accordion.Body>
+                <Image src="xiaohongshu.jpg" alt="小红书二维码" fluid className="img-thumbnail hover-shadow"
+                    style={{ height: 'auto',transform: 'scale(0.98)',transition: 'transform 0.3s ease'}}
+                    onLoad={(e) => {e.currentTarget.style.transform = 'scale(1)'}}/>
+            </Accordion.Body>
+        </Accordion.Item>
+        </Accordion>
+    </Col>
+  </Row>
+  <Row className="justify-content-center g-1">
+    <Col xs={12} md={6} className="d-flex justify-content-center">
+      <Button variant="primary" href="https://www.douyin.com/user/MS4wLjABAAAA3ZnB6dr1lknUupJiF0XZrWZ1mUtsvpRJfuSgmT94WRJpfkvO5S4Jja5h4yFo9vyM?from_tab_name=main" aria-label={`访问小红书：5514710200`} className="px-4 py-2" >
+        点击跳转我的抖音
+      </Button>
+    </Col>
+  </Row>
+  <Row className="mt-1 justify-content-center">
+    <Col xs={10} md={6} lg={4}>
+        <Accordion defaultActiveKey={null} flush className="my-3" style={{borderColor:"blue",borderWidth:"2px",borderStyle:"solid",borderRadius:"10px"}}>
+        <Accordion.Item eventKey="0">
+            <Accordion.Header>
+            <span className="text-primary me-2">
+                <i className="bi bi-chevron-down" />
+            </span>
+            查看抖音二维码
+            </Accordion.Header>
+            <Accordion.Body>
+                <Image src="douyin.png" alt="抖音二维码" fluid className="img-thumbnail hover-shadow"
+                    style={{ height: 'auto',transform: 'scale(0.98)',transition: 'transform 0.3s ease'}}
+                    onLoad={(e) => {e.currentTarget.style.transform = 'scale(1)'}}/>
+            </Accordion.Body>
+        </Accordion.Item>
+        </Accordion>
     </Col>
   </Row>
 </Container>
