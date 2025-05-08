@@ -26,7 +26,6 @@ const fursuitImages = [
   'fursuit7.jpg',
   'fursuit8.jpg',
 ];
-const imgWid =300; 
 
 const FursuitCarousel: React.FC = () => {
   return (
@@ -37,8 +36,6 @@ const FursuitCarousel: React.FC = () => {
             className="d-block w-100"
             src={`/fursuit/${image}`}
             alt={`Fursuit ${index + 1}`}
-            height='720vh'
-            width={imgWid}
           />
         </Carousel.Item>
       ))}

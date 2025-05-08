@@ -9,7 +9,6 @@ const QQProfileLink: React.FC = () => {
   return (
     <Container fluid className="text-center px-3" style={{ marginTop: '20px' }}>
       <Row className="justify-content-center g-1">
-        {/* 添加响应式宽度控制 */}
         <Col 
           xs={12} 
           lg={8} 
