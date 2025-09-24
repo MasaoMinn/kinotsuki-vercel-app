@@ -26,10 +26,10 @@ function BasicExample() {
               <NavDropdown.Item onClick={() => i18n.changeLanguage('jp')}>{'日本語'}</NavDropdown.Item>
             </NavDropdown>
             <NavDropdown title={t('mainpage.dropdown')} id="basic-nav-dropdown">
-              <NavDropdown.Item><Button onClick={toggleTheme} variant={theme}>
+              <NavDropdown.Item><Button onClick={toggleTheme} variant={theme} className='w-100'>
                 {t('mainpage.theme')} {theme === "light" ? "🌙" : "☀️"}
               </Button></NavDropdown.Item>
-              <NavDropdown.Item><Button href='./About' variant={theme}>{t('mainpage.about')}</Button></NavDropdown.Item>
+              <NavDropdown.Item href='./About'><Button variant={theme} className='w-100'>{t('mainpage.about')}</Button></NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="https://github.com/MasaoMinn/MasaoMinn.github.io">{t('mainpage.seeme')}</NavDropdown.Item>
             </NavDropdown>

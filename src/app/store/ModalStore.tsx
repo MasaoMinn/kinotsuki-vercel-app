@@ -1,15 +1,22 @@
 import { create } from 'zustand'
 
-type ModalType = 'alert' | null
+export type ToastType = 'like' | 'dislike' | 'error' | null;
+export type ToastPayload = {
+  type: ToastType;
+  title?: string | null;
+  message?: string | null;
+};
 
 type ModalStore = {
-  openModal: ModalType
-  showModal: (type: ModalType) => void
-  hideModal: () => void
+  toast: ToastPayload;
+  showModal: (payload: ToastPayload) => void;
+  hideModal: () => void;
 }
 
 export const useModalStore = create<ModalStore>((set) => ({
-  openModal: null,
-  showModal: (type) => set({ openModal: type }),
-  hideModal: () => set({ openModal: null }),
+  toast: { type: null, title: null, message: null },
+  showModal: (payload) => set(state => ({ ...state, toast: payload })),
+  hideModal: () => set(state => ({
+    ...state, toast: { type: null, title: null, message: null }
+  })),
 }))

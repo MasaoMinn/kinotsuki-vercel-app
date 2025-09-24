@@ -8,10 +8,12 @@ import Experience from "@/components/layout/Experience";
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import axios from "axios";
 import { getLikesResponse } from "@/app/api/utils/types/likes";
-
+import { useModalStore } from "./store/ModalStore";
+import { MyToast } from "@/components/boxed/Toast";
 const Introduction = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
+
   return (
     <div className="" style={theme == "light" ? { backgroundColor: "#F4FFC8", color: "#00211F" } : { backgroundColor: "#161712", color: "#D5FFFA" }}>
       <h3>{t('intro.iam')} <b>{t('intro.name')}</b></h3>
@@ -30,6 +32,7 @@ const Introduction = () => {
 const Main = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
+  const { toast } = useModalStore();
   const [activeTab, setActiveTab] = React.useState<'OI' | 'Developper' | 'Language'>('OI');
   const tabTitles = [
     { key: 'OI', label: t('mainpage.oi.label') },
@@ -44,15 +47,36 @@ const Main = () => {
   }), []);
   const initialThumbs = React.useMemo(() => Array.from({ length: 5 }, () => initialThumb), [initialThumb]);
   const [thumbsData, setThumbsData] = React.useState<getLikesResponse[]>(initialThumbs);
+  const { showModal } = useModalStore();
   const thumbsUp = async (id: number, type: 'like' | 'dislike') => {
-    setThumbsData(prev => prev.map((thumb, index) => index === id - 1 ? { ...thumb, data: { ...thumb.data, [type]: thumb.data[type] + 1 } } : thumb));
     try {
-      await axios.post('/api/mainpage/like', {
-        id,
-        type
-      });
+      const VOTE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+      let votes: Record<string, { last: number; type: string }> = {};
+      try {
+        const raw = localStorage.getItem('thumbs_votes');
+        if (raw) votes = JSON.parse(raw);
+      } catch {
+        votes = {};
+      }
+
+      const prev = votes[String(id)];
+      if (prev && (Date.now() - prev.last) < VOTE_TTL) {
+        showModal({ type: 'error', title: '已达到上限', message: '每个项目 24 小时内只能投票一次。' });
+        return;
+      }
+
+      // record the vote immediately to prevent rapid repeat clicks
+      votes[String(id)] = { last: Date.now(), type };
+      try { localStorage.setItem('thumbs_votes', JSON.stringify(votes)); } catch { /* ignore */ }
+
+      // optimistic UI update
+      setThumbsData(prev => prev.map((thumb, index) => index === id - 1 ? { ...thumb, data: { ...thumb.data, [type]: thumb.data[type] + 1 } } : thumb));
+      showModal({ type });
+
+      await axios.post('/api/mainpage/like', { id, type });
     } catch (err) {
       console.log(err);
+      showModal({ type: 'error', title: '请求失败', message: '网络或服务器错误，稍后再试。' });
     }
   }
 
@@ -139,23 +163,24 @@ const Main = () => {
           </Stack>
         </Col>
         <Col style={{ borderColor: "blue", borderWidth: "2px", borderStyle: "solid", borderRadius: "10px" }}>
-          <Stack gap={1}>
+          <Stack gap={0}>
             <div className="p-2"><h3><b>{t('mainpage.tools.title')}</b></h3></div>
             <div className="p-2 text-primary">{t('mainpage.tools.description')}</div>
             <div className="hr" />
             <div className="p-2">
-              <Button href="/" variant={theme} className="w-100">{t('mainpage.tools.tobe')}</Button>
+              <Button href="/" variant={theme} className="">{t('mainpage.tools.tobe')}</Button>
               <ThumbsUp onClick={() => thumbsUp(4, 'like')} /> <span >[{thumbsData[3].data.like}]</span>
               <ThumbsDown onClick={() => thumbsUp(4, 'dislike')} /> <span >[{thumbsData[3].data.dislike}]</span>
             </div>
             <div className="p-2">
-              <Button href="/Furry" variant={theme} className="w-100">{t('mainpage.tools.furry')}</Button>
+              <Button href="/Furry" variant={theme} className="">{t('mainpage.tools.furry')}</Button>
               <ThumbsUp onClick={() => thumbsUp(5, 'like')} /> <span >[{thumbsData[4].data.like}]</span>
               <ThumbsDown onClick={() => thumbsUp(5, 'dislike')} /> <span >[{thumbsData[4].data.dislike}]</span>
             </div>
           </Stack>
         </Col>
       </Row>
+      <Row><MyToast {...toast} /></Row>
     </Container>
   );
 }

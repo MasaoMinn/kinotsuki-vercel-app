@@ -34,6 +34,12 @@ i18n
             motto: "My motto: Be motivated without pressure, stay tense without anxiety, and act quickly without confusion ,"
           },
           lang: 'Language',
+          toast: {
+            like_title: 'Thank You For Your Like !',
+            like_message: 'Please do not click it too many times.',
+            dislike_title: 'I`m So Sad QAQ',
+            dislike_message: 'Please let me know if you have any suggestions.',
+          },
           mainpage: {
             title: 'Sunny_Tangetsu - Portfolio',
             dropdown: 'More',
@@ -51,7 +57,7 @@ i18n
               title: 'Tools',
               description: 'Useful tools',
               tobe: 'Stay Tuned',
-              furry: 'Furry'
+              furry: 'Contact Me'
             },
             oi: {
               label: 'OI-ACM',
@@ -140,12 +146,31 @@ i18n
             motto: "我的座右铭：有动力而无压力，紧张而不焦虑，迅速而不慌乱。"
           },
           lang: '语言',
+          toast: {
+            like_title: '感谢您的点赞 !',
+            like_message: '请不要重复点击点赞按钮。',
+            dislike_title: '我很抱歉',
+            dislike_message: '请让我知道您有什么建议。',
+          },
           mainpage: {
             title: 'Sunny_湛月 - 个人网站',
             dropdown: '更多',
             about: '关于',
             seeme: '我的 Github',
             theme: '主题',
+            minigame: {
+              title: '小游戏',
+              description: '这里是我写的一些H5小游戏。',
+              bwite: '黑白迭代',
+              color: '我色感贼6',
+              light: '点灯新世界(双人游戏)'
+            },
+            tools: {
+              title: '工具',
+              description: '这里是我写的一些工具。',
+              tobe: '敬请期待',
+              furry: 'LXFS'
+            },
             oi: {
               label: 'OI-ACM',
               title: "OI-ACM生涯 (2020/9-2025/9)",
@@ -233,12 +258,32 @@ i18n
             motto: "私のモットー：プレッシャーなくやる気を持ち、不安感なく緊張し、慌てることなく速やかに行動する。"
           },
           lang: '言語',
+          toast: {
+            like_title: 'ありがとうございました。！',
+            like_message: 'バトンをぐっと押さないでください。',
+            dislike_title: '私には改善の余地があります。',
+            dislike_message: '改善の余地がある場合は、メッセージを送ってください。',
+
+          },
           mainpage: {
             title: 'Sunny_湛月 - ポートフォリオ',
             dropdown: 'そのうえ',
             about: '私について',
             seeme: 'Github',
             theme: '色気',
+            minigame: {
+              title: 'ゲーム',
+              description: 'ここは私が書いたゲームです。',
+              bwite: '黒白の交替',
+              color: '私の色感覚が最高だ',
+              light: '電気をつける挑戦(二人のゲーム)',
+            },
+            tools: {
+              title: '工具',
+              description: '役に立つ工具',
+              tobe: '乞うご期待',
+              furry: '連絡先'
+            },
             oi: {
               label: 'アルゴリズムコンテストについて',
               title: "OI-ACMキャリア (2020/9-2025/9)",

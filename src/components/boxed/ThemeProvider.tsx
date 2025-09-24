@@ -49,40 +49,24 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // 获取初始主题（优先 localStorage > 系统主题 > 默认 light）
   const getInitialTheme = useCallback((): Theme => {
     try {
-      // 优先从 cookie 获取
-      const match = document.cookie.match(/(?:^|; )theme=(light|dark)/);
-      if (match && (match[1] === 'light' || match[1] === 'dark')) {
-        return match[1] as Theme;
-      }
-      // localStorage 备选
+      // 优先从 localStorage 获取
       const storedTheme = localStorage.getItem("theme") as Theme | null;
-      if (storedTheme) {
-        document.cookie = `theme=${storedTheme}; path=/; max-age=31536000`;
+      if (storedTheme === "light" || storedTheme === "dark") {
         return storedTheme;
       }
       // 检测系统主题
       const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      const theme = systemDark ? "dark" : "light";
-      // 创建 cookie
-      document.cookie = `theme=${theme}; path=/; max-age=31536000`;
-      return theme;
+      return systemDark ? "dark" : "light";
     } catch (e) {
       // 回退
       console.log(e);
-      document.cookie = `theme=light; path=/; max-age=31536000`;
       return "light";
     }
   }, []);
 
   const [theme, setTheme] = useState<Theme>(getInitialTheme());
 
-  useEffect(() => {
-    // 这里可以安全访问 document 和 localStorage
-    const match = document.cookie.match(/(?:^|; )theme=(light|dark)/);
-    if (match && (match[1] === 'light' || match[1] === 'dark')) {
-      setTheme(match[1] as Theme);
-    }
-  }, []);
+  // 不再从 cookie 同步 theme
 
   // 切换主题方法
   const toggleTheme = useCallback(() => {
@@ -90,7 +74,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       const newTheme = prev === "light" ? "dark" : "light";
       try {
         localStorage.setItem("theme", newTheme);
-        document.cookie = `theme=${newTheme}; path=/; max-age=31536000`;
       } catch (e) {
         console.warn(e);
       }
