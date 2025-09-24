@@ -34,38 +34,55 @@ export const useTheme = () => {
 };
 
 export const darkTheme = {
-  backgroundColor : '#1C1C1C',
-  color : '#EEEEFE',
-  borderColor : '#0000FF',
+  backgroundColor: '#1C1C1C',
+  color: '#EEEEFE',
+  borderColor: '#0000FF',
 };
 
 export const lightTheme = {
-  backgroundColor : '#EEEEEE',
-  color : '#000000',
-  borderColor : '#FF0000',
+  backgroundColor: '#EEEEEE',
+  color: '#000000',
+  borderColor: '#FF0000',
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // 获取初始主题（优先 localStorage > 系统主题 > 默认 light）
   const getInitialTheme = useCallback((): Theme => {
     try {
-      // 尝试从 localStorage 获取持久化主题
+      // 优先从 cookie 获取
+      const match = document.cookie.match(/(?:^|; )theme=(light|dark)/);
+      if (match && (match[1] === 'light' || match[1] === 'dark')) {
+        return match[1] as Theme;
+      }
+      // localStorage 备选
       const storedTheme = localStorage.getItem("theme") as Theme | null;
-      if (storedTheme) return storedTheme;
-
+      if (storedTheme) {
+        document.cookie = `theme=${storedTheme}; path=/; max-age=31536000`;
+        return storedTheme;
+      }
       // 检测系统主题
-      const systemDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      return systemDark ? "dark" : "light";
+      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const theme = systemDark ? "dark" : "light";
+      // 创建 cookie
+      document.cookie = `theme=${theme}; path=/; max-age=31536000`;
+      return theme;
     } catch (e) {
-      // localStorage 不可用时的回退方案
+      // 回退
       console.log(e);
+      document.cookie = `theme=light; path=/; max-age=31536000`;
       return "light";
     }
   }, []);
 
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [theme, setTheme] = useState<Theme>(getInitialTheme());
+
+  useEffect(() => {
+    // 这里可以安全访问 document 和 localStorage
+    const match = document.cookie.match(/(?:^|; )theme=(light|dark)/);
+    if (match && (match[1] === 'light' || match[1] === 'dark')) {
+      setTheme(match[1] as Theme);
+    }
+  }, []);
 
   // 切换主题方法
   const toggleTheme = useCallback(() => {
@@ -73,6 +90,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       const newTheme = prev === "light" ? "dark" : "light";
       try {
         localStorage.setItem("theme", newTheme);
+        document.cookie = `theme=${newTheme}; path=/; max-age=31536000`;
       } catch (e) {
         console.warn(e);
       }
@@ -83,7 +101,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // 监听系统主题变化（仅在未手动设置时响应）
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    
+
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
       try {
         // 如果 localStorage 中不存在手动设置的主题，则跟随系统

@@ -35,7 +35,7 @@
     ".next/types/**/*.ts",
     "src/components/Picture.jsx",
     "src/components/Picturejs"
-  ],
+, "src/api/mainpage/like/route.js"  ],
   "exclude": [
     "node_modules"
   ]
