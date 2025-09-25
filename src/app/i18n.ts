@@ -40,6 +40,14 @@ i18n
             dislike_title: 'I`m So Sad QAQ',
             dislike_message: 'Please let me know if you have any suggestions.',
           },
+          error: {
+            cookie_title: 'Cookie Access Error',
+            cookie_message: 'Please allow cookie access to vote.',
+            vote_limit_title: 'Vote Limit',
+            vote_limit_message: 'You can only vote once every 24 hours.',
+            request_failed_title: 'Request Failed',
+            request_failed_message: 'Network or server error, please try again later.',
+          },
           mainpage: {
             title: 'Sunny_Tangetsu - Portfolio',
             dropdown: 'More',

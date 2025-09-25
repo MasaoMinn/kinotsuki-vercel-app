@@ -48,7 +48,36 @@ const Main = () => {
   const initialThumbs = React.useMemo(() => Array.from({ length: 5 }, () => initialThumb), [initialThumb]);
   const [thumbsData, setThumbsData] = React.useState<getLikesResponse[]>(initialThumbs);
   const { showModal } = useModalStore();
+  const [hasStorageAccess, setHasStorageAccess] = React.useState<boolean>(false);
+
+  // Check if localStorage/cookie access is available
+  const checkStorageAccess = React.useCallback(() => {
+    try {
+      // Test localStorage access
+      const testKey = 'storage_test';
+      localStorage.setItem(testKey, 'test');
+      localStorage.removeItem(testKey);
+      setHasStorageAccess(true);
+    } catch (error) {
+      setHasStorageAccess(false);
+    }
+  }, []);
+
+  // Check storage access on component mount
+  React.useEffect(() => {
+    checkStorageAccess();
+  }, [checkStorageAccess]);
   const thumbsUp = async (id: number, type: 'like' | 'dislike') => {
+    // Check if user has storage access before allowing vote
+    if (!hasStorageAccess) {
+      showModal({
+        type: 'error',
+        title: t('error.cookie_title'),
+        message: t('error.cookie_message')
+      });
+      return;
+    }
+
     try {
       const VOTE_TTL = 24 * 60 * 60 * 1000; // 24 hours
       let votes: Record<string, { last: number; type: string }> = {};
@@ -61,7 +90,7 @@ const Main = () => {
 
       const prev = votes[String(id)];
       if (prev && (Date.now() - prev.last) < VOTE_TTL) {
-        showModal({ type: 'error', title: '已达到上限', message: '每个项目 24 小时内只能投票一次。' });
+        showModal({ type: 'error', title: t('error.vote_limit_title'), message: t('error.vote_limit_message') });
         return;
       }
 
@@ -76,7 +105,7 @@ const Main = () => {
       await axios.post('/api/mainpage/like', { id, type });
     } catch (err) {
       console.log(err);
-      showModal({ type: 'error', title: '请求失败', message: '网络或服务器错误，稍后再试。' });
+      showModal({ type: 'error', title: t('error.request_failed_title'), message: t('error.request_failed_message') });
     }
   }
 
@@ -144,21 +173,68 @@ const Main = () => {
           <Stack gap={0}>
             <div className="p-2"><h3><b>{t('mainpage.minigame.title')}</b></h3></div>
             <div className="p-2 text-primary">{t('mainpage.minigame.description')}</div>
+            {!hasStorageAccess && (
+              <div className="p-2 text-warning" style={{ fontSize: '0.9rem' }}>
+                ⚠️ {t('error.cookie_message')}
+              </div>
+            )}
             <div className="hr" />
             <div className="p-2">
               <Button href="/BWIte/index.html" variant={theme} className="">{t('mainpage.minigame.bwite')}</Button>
-              <ThumbsUp onClick={() => thumbsUp(1, 'like')} /> <span >[{thumbsData[0].data.like}]</span>
-              <ThumbsDown onClick={() => thumbsUp(1, 'dislike')} /> <span >[{thumbsData[0].data.dislike}]</span>
+              <ThumbsUp
+                onClick={() => thumbsUp(1, 'like')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[0].data.like}]</span>
+              <ThumbsDown
+                onClick={() => thumbsUp(1, 'dislike')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[0].data.dislike}]</span>
             </div>
             <div className="p-2">
               <Button href="/Color/index.html" variant={theme} className="">{t('mainpage.minigame.color')}</Button>
-              <ThumbsUp onClick={() => thumbsUp(2, 'like')} /> <span >[{thumbsData[1].data.like}]</span>
-              <ThumbsDown onClick={() => thumbsUp(2, 'dislike')} /> <span >[{thumbsData[1].data.dislike}]</span>
+              <ThumbsUp
+                onClick={() => thumbsUp(2, 'like')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[1].data.like}]</span>
+              <ThumbsDown
+                onClick={() => thumbsUp(2, 'dislike')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[1].data.dislike}]</span>
             </div>
             <div className="p-2">
               <Button href="/LightMaze" variant={theme} className="">{t('mainpage.minigame.light')}</Button>
-              <ThumbsUp onClick={() => thumbsUp(3, 'like')} /> <span >[{thumbsData[2].data.like}]</span>
-              <ThumbsDown onClick={() => thumbsUp(3, 'dislike')} /> <span >[{thumbsData[2].data.dislike}]</span>
+              <ThumbsUp
+                onClick={() => thumbsUp(3, 'like')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[2].data.like}]</span>
+              <ThumbsDown
+                onClick={() => thumbsUp(3, 'dislike')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[2].data.dislike}]</span>
             </div>
           </Stack>
         </Col>
@@ -169,13 +245,41 @@ const Main = () => {
             <div className="hr" />
             <div className="p-2">
               <Button href="/" variant={theme} className="">{t('mainpage.tools.tobe')}</Button>
-              <ThumbsUp onClick={() => thumbsUp(4, 'like')} /> <span >[{thumbsData[3].data.like}]</span>
-              <ThumbsDown onClick={() => thumbsUp(4, 'dislike')} /> <span >[{thumbsData[3].data.dislike}]</span>
+              <ThumbsUp
+                onClick={() => thumbsUp(4, 'like')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[3].data.like}]</span>
+              <ThumbsDown
+                onClick={() => thumbsUp(4, 'dislike')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[3].data.dislike}]</span>
             </div>
             <div className="p-2">
               <Button href="/Furry" variant={theme} className="">{t('mainpage.tools.furry')}</Button>
-              <ThumbsUp onClick={() => thumbsUp(5, 'like')} /> <span >[{thumbsData[4].data.like}]</span>
-              <ThumbsDown onClick={() => thumbsUp(5, 'dislike')} /> <span >[{thumbsData[4].data.dislike}]</span>
+              <ThumbsUp
+                onClick={() => thumbsUp(5, 'like')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[4].data.like}]</span>
+              <ThumbsDown
+                onClick={() => thumbsUp(5, 'dislike')}
+                style={{
+                  cursor: hasStorageAccess ? 'pointer' : 'not-allowed',
+                  opacity: hasStorageAccess ? 1 : 0.5,
+                  color: hasStorageAccess ? 'inherit' : '#999'
+                }}
+              /> <span >[{thumbsData[4].data.dislike}]</span>
             </div>
           </Stack>
         </Col>
