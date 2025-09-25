@@ -59,6 +59,7 @@ const Main = () => {
       localStorage.removeItem(testKey);
       setHasStorageAccess(true);
     } catch (error) {
+      console.log(error);
       setHasStorageAccess(false);
     }
   }, []);
@@ -168,7 +169,7 @@ const Main = () => {
           </div>
         </Col>
       </Row>
-      <Row className="text-center" style={{ width: "100%" }}>
+      <Row className="text-center" style={{ width: "67%", margin: "0 auto" }}>
         <Col style={{ borderColor: "blue", borderWidth: "2px", borderStyle: "solid", borderRadius: "10px", marginRight: "3vw" }}>
           <Stack gap={0}>
             <div className="p-2"><h3><b>{t('mainpage.minigame.title')}</b></h3></div>

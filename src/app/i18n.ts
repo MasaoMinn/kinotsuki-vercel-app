@@ -24,7 +24,7 @@ i18n
           intro: {
             iam: "I'm ",
             name: "Sunny_Tangetsu",
-            college: "By now a college sophomore from SCUT, major in software engineering.",
+            college: "By now a college junior from SCUT, major in software engineering.",
             cpp: "I fell in love with C++ programming in high school, that's why I chose this major.",
             react: "I'm studying React.js (Next.js) full-stack framework, this page is my first React product.",
             language: "I'm studying English for TOEFL and Japanese for JLPT N2. I watch Family Guy and Big Bang to improve my English accumulation.",

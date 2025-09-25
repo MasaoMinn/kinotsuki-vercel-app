@@ -7,8 +7,8 @@ import Link from "next/link";
 const About = () => {
   const { theme } = useTheme();
   return (
-    <Container className="justify-content-center align-items-center text-center" fluid style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }}>
-      <Row style={{ backgroundColor: theme === 'light' ? "#F4FFC8" : "#447652" }}>
+    <Container className="justify-content-center align-items-center text-center" fluid style={theme === 'light' ? { ...lightTheme, backgroundColor: "#F4FFC8" } : { ...darkTheme, backgroundColor: "#447652" }}>
+      <Row >
         <Stack direction="horizontal" className="justify-content-center align-items-center" gap={3}>
           <div className="p-2"><Image src={`/logo_${theme}.svg`} alt="wordmark" height={100} width={100} /></div>
           <div className="vr" />
