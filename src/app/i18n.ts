@@ -135,6 +135,9 @@ i18n
                 "2025/7->now Finished JLPT N2 with a score of 106.Now head for JLPT N1.",
               ]
             }
+          },
+          furry: {
+            intro: "Hello! This is Kino Tsuki, a blue furry fox, living in Guangzhou China.I'm excited to connect with you here! Feel free to reach out to add me as a friend. Looking forward to chatting and sharing our furry interests!"
           }
 
         },
@@ -247,8 +250,10 @@ i18n
                 "2025/7~至今 我通过了 JLPT N2，得分 106 分。现在继续朝 JLPT N1 努力。",
               ]
             }
-
           },
+          furry: {
+            intro: "你好！我是湛月，一只生活在中国广州的蓝色兽设狐狸。很高兴能在这里与你联系！欢迎随时联系我加为好友。期待与你聊天并分享furry的乐趣！"
+          }
         },
       },
       jp: {
@@ -360,8 +365,10 @@ i18n
                 "2025/7~現在 JLPT N2 に合格し、106点を取りました。現在は JLPT N1 に向けて勉強を続けています。",
               ]
             }
-
           },
+          furry: {
+            intro: "こんにちは！私はキノツキ、広州に住む青いケモノの狐です。ここであなたとつながることができてうれしいです！友達追加のためにいつでも連絡してください。お話ししたり、ケモノの興味を共有したりするのを楽しみにしています！"
+          }
         },
       }
     }

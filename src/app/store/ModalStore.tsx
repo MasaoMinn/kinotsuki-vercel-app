@@ -1,22 +1,32 @@
 import { create } from 'zustand'
 
-export type ToastType = 'like' | 'dislike' | 'error' | null;
-export type ToastPayload = {
-  type: ToastType;
-  title?: string | null;
-  message?: string | null;
+export type ModalType = 'cookie';
+export type ModalPayload = {
+  id: string;
+  type: ModalType;
+  title: string;
+  firstMessage: string;
+  secondMessage?: string;
+  pictureURL?: string;
 };
 
 type ModalStore = {
-  toast: ToastPayload;
-  showModal: (payload: ToastPayload) => void;
-  hideModal: () => void;
+  modal: ModalPayload[];
+  showModal: (payload: Omit<ModalPayload, 'id'>) => void;
+  hideModal: (id?: string) => void;
 }
 
+// Keep at most 3 toasts visible at once. Newest toasts are appended; oldest are removed when over limit.
 export const useModalStore = create<ModalStore>((set) => ({
-  toast: { type: null, title: null, message: null },
-  showModal: (payload) => set(state => ({ ...state, toast: payload })),
-  hideModal: () => set(state => ({
-    ...state, toast: { type: null, title: null, message: null }
+  modal: [],
+  showModal: (payload) => set(state => {
+    const id = String(Date.now()) + Math.random().toString(36).slice(2, 7);
+    const next = [...state.modal, { id, ...payload }];
+    if (next.length > 3) next.shift(); // remove oldest
+    return { ...state, modal: next };
+  }),
+  hideModal: (id?: string) => set(state => ({
+    ...state,
+    modal: id ? state.modal.filter(t => t.id !== id) : []
   })),
 }))

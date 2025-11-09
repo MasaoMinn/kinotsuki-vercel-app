@@ -1,29 +1,50 @@
 "use client";
-import type { ToastPayload } from '@/app/store/ModalStore';
-import { useEffect, useState } from 'react';
-import { Toast, ToastContainer } from 'react-bootstrap';
+import type { ToastPayload } from '@/app/store/ToastStore';
+import { useEffect, useState, useRef } from 'react';
+import { Toast } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useModalStore } from '@/app/store/ModalStore';
+import { useToastStore } from '@/app/store/ToastStore';
 import { useTheme, darkTheme, lightTheme } from './ThemeProvider';
+import './toast.css';
+
 export const MyToast = (props: ToastPayload) => {
   const { t } = useTranslation();
-  const hideModal = useModalStore(s => s.hideModal);
+  const hideModal = useToastStore(s => s.hideToast);
   const { theme } = useTheme();
   const [show, setShow] = useState(true);
+  const closeTimerRef = useRef<number | null>(null);
+  const removeTimerRef = useRef<number | null>(null);
   const { type, title: pTitle, message: pMessage } = props ?? { type: null, title: null, message: null };
   useEffect(() => {
     setShow(true);
   }, [type, pTitle, pMessage]);
 
   useEffect(() => {
-    const delay = 2500;
+    const DISPLAY_MS = 2500;
+    const FADE_MS = 240; // should match CSS transition duration
     if (!type) return;
-    const timer = setTimeout(() => {
+
+    // Start auto close (sets show -> false to trigger CSS fade)
+    closeTimerRef.current = window.setTimeout(() => {
       setShow(false);
-      hideModal();
-    }, delay + 50);
-    return () => clearTimeout(timer);
-  }, [type, pTitle, pMessage, hideModal]);
+    }, DISPLAY_MS);
+
+    // Remove from store after fade completes
+    removeTimerRef.current = window.setTimeout(() => {
+      hideModal(props?.id);
+    }, DISPLAY_MS + FADE_MS);
+
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+        closeTimerRef.current = null;
+      }
+      if (removeTimerRef.current) {
+        clearTimeout(removeTimerRef.current);
+        removeTimerRef.current = null;
+      }
+    };
+  }, [type, pTitle, pMessage, hideModal, props?.id]);
 
   if (!props || !props.type) return null;
 
@@ -31,25 +52,32 @@ export const MyToast = (props: ToastPayload) => {
   const finalMessage = props.message ?? (props.type !== 'error' ? t(`toast.${props.type}_message`) : null);
 
   const handleClose = () => {
+    // Stop any pending timers and trigger fade-out, then remove after FADE_MS
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    if (removeTimerRef.current) {
+      clearTimeout(removeTimerRef.current);
+      removeTimerRef.current = null;
+    }
+    const FADE_MS = 240;
     setShow(false);
-    hideModal();
+    window.setTimeout(() => hideModal(props?.id), FADE_MS);
   };
 
   return (
-    <ToastContainer className="p-3" position='bottom-center' >
-      <Toast
-        show={show}
-        onClose={handleClose}
-        delay={2500}
-        autohide
-        style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }}
-      >
-        <Toast.Header>
-          <strong className="me-auto">{finalTitle}</strong>
-          <small>{new Date().toLocaleTimeString()}</small>
-        </Toast.Header>
-        <Toast.Body>{finalMessage}</Toast.Body>
-      </Toast>
-    </ToastContainer>
+    <Toast
+      show={show}
+      onClose={handleClose}
+      className="fade"
+      style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }}
+    >
+      <Toast.Header>
+        <strong className="me-auto">{finalTitle}</strong>
+        <small>{new Date().toLocaleTimeString()}</small>
+      </Toast.Header>
+      <Toast.Body>{finalMessage}</Toast.Body>
+    </Toast>
   );
 };

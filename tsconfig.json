@@ -15,7 +15,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -34,8 +34,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/Picture.jsx",
-    "src/components/Picturejs"
-, "src/api/mainpage/like/route.js"  ],
+    "src/components/Picturejs",
+    "src/api/mainpage/like/route.js",
+    ".next/dev/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

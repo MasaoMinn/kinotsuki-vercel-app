@@ -1,5 +1,6 @@
 import React from 'react';
 import { Carousel, Image } from 'react-bootstrap';
+
 const fursuitImages = [
   'furry1.jpg',
   'furry2.png',

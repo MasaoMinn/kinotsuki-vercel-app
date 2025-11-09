@@ -3,6 +3,8 @@ import { ThemeProvider } from "@/components/boxed/ThemeProvider";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './i18n';
 import Header from "@/components/layout/Header";
+import GlobalToasts from '@/components/layout/GlobalToasts';
+import GlobalModals from '@/components/layout/GlobalModals';
 
 export const metadata: Metadata = {
   title: "Sunny_ZY's website",
@@ -25,6 +27,8 @@ export default function RootLayout({
         <body>
           <Header />
           {children}
+          <GlobalToasts />
+          <GlobalModals />
 
         </body>
       </html>
