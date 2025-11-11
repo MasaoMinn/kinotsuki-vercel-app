@@ -79,6 +79,11 @@ const Main = () => {
   }, []);
   return (
     <Container className="" style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }} fluid>
+      <Row>
+        <Col xs={12} md={8} className="d-flex justify-content-center align-items-center">
+
+        </Col>
+      </Row>
       <Row className="justify-content-center align-items-center" style={{ minHeight: "260px", marginBottom: "2rem" }}>
         <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
           <Image

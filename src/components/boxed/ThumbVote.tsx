@@ -11,11 +11,11 @@ export type ThumbVoteProps = {
   likes: number;
   dislikes: number;
   hasStorageAccess: boolean;
-  // Allow the component to update the parent's thumbs data optimistically
+  thumbDown?: boolean;
   setThumbsData: React.Dispatch<React.SetStateAction<getLikesResponse[]>>;
 };
 
-export const ThumbVote: React.FC<ThumbVoteProps> = ({ id, likes, dislikes, hasStorageAccess, setThumbsData }) => {
+export const ThumbVote: React.FC<ThumbVoteProps> = ({ id, likes, dislikes, hasStorageAccess, thumbDown = true, setThumbsData }) => {
   const { t } = useTranslation();
   const { showToast } = useToastStore();
 
@@ -73,11 +73,13 @@ export const ThumbVote: React.FC<ThumbVoteProps> = ({ id, likes, dislikes, hasSt
         style={iconStyle}
       />{' '}
       <span>[{likes}]</span>{' '}
-      <ThumbsDown
-        onClick={() => thumbsUp(id, 'dislike')}
-        style={iconStyle}
-      />{' '}
-      <span>[{dislikes}]</span>
+      {thumbDown && <>
+        <ThumbsDown
+          onClick={() => thumbsUp(id, 'dislike')}
+          style={iconStyle}
+        />{' '}
+        <span>[{dislikes}]</span>
+      </>}
     </>
   );
 };

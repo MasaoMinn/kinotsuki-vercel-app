@@ -5,7 +5,7 @@ import { Toast } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useToastStore } from '@/app/store/ToastStore';
 import { useTheme, darkTheme, lightTheme } from './ThemeProvider';
-import './toast.css';
+import { motion } from 'motion/react';
 
 export const MyToast = (props: ToastPayload) => {
   const { t } = useTranslation();
@@ -67,17 +67,24 @@ export const MyToast = (props: ToastPayload) => {
   };
 
   return (
-    <Toast
-      show={show}
-      onClose={handleClose}
-      className="fade"
-      style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }}
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: show ? 1 : 0, scale: show ? 1 : 0.9 }}
+      exit={{ opacity: 0, scale: 0 }}
+      transition={{ duration: 0.24 }}
+      whileHover={{ scale: 1.1 }}
     >
-      <Toast.Header>
-        <strong className="me-auto">{finalTitle}</strong>
-        <small>{new Date().toLocaleTimeString()}</small>
-      </Toast.Header>
-      <Toast.Body>{finalMessage}</Toast.Body>
-    </Toast>
+      <Toast
+        show={show}
+        onClose={handleClose}
+        style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }}
+      >
+        <Toast.Header>
+          <strong className="me-auto">{finalTitle}</strong>
+          <small>{new Date().toLocaleTimeString()}</small>
+        </Toast.Header>
+        <Toast.Body>{finalMessage}</Toast.Body>
+      </Toast>
+    </motion.div>
   );
 };
