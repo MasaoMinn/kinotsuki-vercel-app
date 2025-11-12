@@ -15,35 +15,31 @@ import {
   Bodies,
   Composite,
   Body,
-  World,
 } from "matter-js";
+import React from "react";
+import Bubble, { BubbleProps } from "./Bubble";
 
-export interface MatterDemoHandle {
+export interface BubblesBoardHandle {
   start: () => void;
   pause: () => void;
   reset: () => void;
   getEngine: () => Engine | null;
 }
 
-export interface MatterDemoProps {
+export interface BubblesBoardProps {
   width?: number;
   height?: number;
   background?: string;
   wireframes?: boolean;
   autoRun?: boolean;
-  createBodies?: (ctx: {
-    Engine: typeof Engine;
-    Render: typeof Render;
-    Runner: typeof Runner;
-    Bodies: typeof Bodies;
-    Composite: typeof Composite;
-    Body: typeof Body;
-    World: typeof World;
-  }) => Body[];
   className?: string;
+  children?: React.ReactElement<BubbleProps>[];
+  ground?: boolean;
+  box?: boolean;
+  gravity?: number;
 }
 
-const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
+const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
   (
     {
       width = 800,
@@ -51,8 +47,11 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
       background = "#f8fafc",
       wireframes = false,
       autoRun = true,
-      createBodies,
       className = "",
+      children,
+      ground = true,
+      box = true,
+      gravity = 1,
     },
     ref
   ) => {
@@ -62,20 +61,17 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
     const runnerRef = useRef<Runner | null>(null);
     const [isRunning, setIsRunning] = useState(autoRun);
 
-    const initializeMatter = useCallback(() => {
+    const initialize = useCallback(() => {
       const container = containerRef.current;
       if (!container) return;
 
       const engine = Engine.create();
+      engine.gravity.y = Math.max(0, Math.min(1, gravity));
+
       const render = Render.create({
         element: container,
         engine,
-        options: {
-          width,
-          height,
-          background,
-          wireframes,
-        },
+        options: { width, height, background, wireframes },
       });
       const runner = Runner.create();
 
@@ -83,22 +79,36 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
       renderRef.current = render;
       runnerRef.current = runner;
 
-      const defaultBodies: Body[] = [
-        Bodies.rectangle(400, 200, 80, 80),
-        Bodies.rectangle(450, 50, 80, 80),
-        Bodies.rectangle(400, 610, 810, 60, { isStatic: true }),
-      ];
+      const staticBodies: Body[] = [];
+      if (ground) {
+        staticBodies.push(
+          Bodies.rectangle(width / 2, height - 2, width, 1, {
+            isStatic: true,
+            restitution: 1,
+            friction: 0.5,
+          })
+        );
+      }
 
-      const bodies =
-        createBodies?.({
-          Engine,
-          Render,
-          Runner,
-          Bodies,
-          Composite,
-          Body,
-          World,
-        }) ?? defaultBodies;
+      if (box) {
+        const w = 1;
+        staticBodies.push(
+          Bodies.rectangle(width / 2, -w / 2, width, w, { isStatic: true }), // top
+          Bodies.rectangle(width + w / 2, height / 2, w, height, { isStatic: true }), // right
+          Bodies.rectangle(-w / 2, height / 2, w, height, { isStatic: true }) // left
+        );
+      }
+
+      const bodies: Body[] = [...staticBodies];
+
+      if (children && React.Children.count(children) > 0) {
+        React.Children.forEach(children, (child) => {
+          if (React.isValidElement<BubbleProps>(child) && child.type === Bubble) {
+            const body = Bubble.createBody(child.props);
+            bodies.push(body);
+          }
+        });
+      }
 
       Composite.add(engine.world, bodies);
 
@@ -107,9 +117,9 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
         Runner.run(runner, engine);
         setIsRunning(true);
       }
-    }, [width, height, background, wireframes, autoRun, createBodies]);
+    }, [width, height, background, wireframes, autoRun, children, ground, box, gravity]);
 
-    const cleanupMatter = useCallback(() => {
+    const cleanup = useCallback(() => {
       if (renderRef.current) {
         Render.stop(renderRef.current);
         renderRef.current.canvas.remove();
@@ -124,11 +134,11 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
     }, []);
 
     useEffect(() => {
-      initializeMatter();
-      return cleanupMatter;
-    }, [initializeMatter, cleanupMatter]);
+      initialize();
+      return cleanup;
+    }, [initialize, cleanup]);
 
-    useImperativeHandle(ref, (): MatterDemoHandle => ({
+    useImperativeHandle(ref, (): BubblesBoardHandle => ({
       start: () => {
         const engine = engineRef.current;
         const render = renderRef.current;
@@ -147,8 +157,8 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
         setIsRunning(false);
       },
       reset: () => {
-        cleanupMatter();
-        initializeMatter();
+        cleanup();
+        initialize();
       },
       getEngine: () => engineRef.current,
     }));
@@ -156,13 +166,12 @@ const MatterDemo = forwardRef<MatterDemoHandle, MatterDemoProps>(
     return (
       <div
         ref={containerRef}
-        className={`relative overflow-hidden rounded-xl border shadow-sm ${className}`}
+        className={`relative overflow-hidden rounded-xl border shadow ${className}`}
         style={{ width, height }}
       />
     );
   }
 );
 
-MatterDemo.displayName = "MatterDemo";
-
-export default MatterDemo;
+BubblesBoard.displayName = "BubblesBoard";
+export default BubblesBoard;

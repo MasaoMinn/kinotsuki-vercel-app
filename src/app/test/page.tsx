@@ -1,13 +1,17 @@
 "use client"
-import MatterDemo, { MatterDemoHandle } from "@/components/layout/BubblesBoard";
+import Bubble from "@/components/layout/Bubble";
+import MatterDemo, { BubblesBoardHandle } from "@/components/layout/BubblesBoard";
 import { useRef } from "react";
 
 export default function Page() {
-  const ref = useRef<MatterDemoHandle>(null);
+  const ref = useRef<BubblesBoardHandle>(null);
 
   return (
     <div className="flex flex-col items-center gap-4 mt-10">
-      <MatterDemo ref={ref} width={800} height={600} background="#f0f9ff" />
+      <MatterDemo ref={ref} width={800} height={600} gravity={0.3} ground >
+        <Bubble shape="circle 12" x={200} y={0} text="Hello" />
+        <Bubble shape="rectangle 40 20" x={300} y={0} text="World" />
+      </MatterDemo>
 
       <div className="space-x-2">
         <button
