@@ -15,6 +15,8 @@ import {
   Bodies,
   Composite,
   Body,
+  Mouse,
+  MouseConstraint,
 } from "matter-js";
 import React from "react";
 import Bubble, { BubbleProps } from "./Bubble";
@@ -36,7 +38,10 @@ export interface BubblesBoardProps {
   children?: React.ReactElement<BubbleProps>[];
   ground?: boolean;
   box?: boolean;
+  boarderWidth?: number;
+  boarderColor?: string;
   gravity?: number;
+  interact?: boolean;
 }
 
 const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
@@ -51,7 +56,10 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
       children,
       ground = true,
       box = true,
+      boarderWidth: boxWidth = 5,
+      boarderColor = "#00eeffe4",
       gravity = 1,
+      interact = false,
     },
     ref
   ) => {
@@ -82,20 +90,52 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
       const staticBodies: Body[] = [];
       if (ground) {
         staticBodies.push(
-          Bodies.rectangle(width / 2, height - 2, width, 1, {
+          Bodies.rectangle(width / 2, height - 1, width, boxWidth, {
             isStatic: true,
             restitution: 1,
-            friction: 0.5,
+            friction: 0.2,
+            render: {
+              fillStyle: boarderColor,
+            }
           })
         );
       }
 
       if (box) {
-        const w = 1;
+        const w = boxWidth;
         staticBodies.push(
-          Bodies.rectangle(width / 2, -w / 2, width, w, { isStatic: true }), // top
-          Bodies.rectangle(width + w / 2, height / 2, w, height, { isStatic: true }), // right
-          Bodies.rectangle(-w / 2, height / 2, w, height, { isStatic: true }) // left
+          Bodies.rectangle(width / 2, w / 2, width, w, {
+            isStatic: true,
+            restitution: 1,
+            friction: 0.2,
+            render: {
+              fillStyle: boarderColor,
+            }
+          }), // top
+          Bodies.rectangle(width - w / 2, height / 2, w, height, {
+            isStatic: true,
+            restitution: 1,
+            friction: 0.2,
+            render: {
+              fillStyle: boarderColor,
+            }
+          }), // right
+          Bodies.rectangle(w / 2, height / 2, w, height, {
+            isStatic: true,
+            restitution: 1,
+            friction: 0.2,
+            render: {
+              fillStyle: boarderColor,
+            }
+          }), // left
+          Bodies.rectangle(width / 2, height - 1, width, boxWidth, {
+            isStatic: true,
+            restitution: 1,
+            friction: 0.2,
+            render: {
+              fillStyle: boarderColor,
+            }
+          }), // bottom
         );
       }
 
@@ -112,12 +152,23 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
 
       Composite.add(engine.world, bodies);
 
+      if (interact && render.canvas) {
+        const mouse = Mouse.create(render.canvas);
+        const mouseConstraint = MouseConstraint.create(engine, {
+          mouse: mouse,
+          constraint: {
+            stiffness: 0.2,
+          },
+        });
+        Composite.add(engine.world, mouseConstraint);
+        render.mouse = mouse;
+      }
       if (autoRun) {
         Render.run(render);
         Runner.run(runner, engine);
         setIsRunning(true);
       }
-    }, [width, height, background, wireframes, autoRun, children, ground, box, gravity]);
+    }, [width, height, background, wireframes, autoRun, children, ground, box, gravity, interact, boxWidth, boarderColor]);
 
     const cleanup = useCallback(() => {
       if (renderRef.current) {

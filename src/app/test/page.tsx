@@ -8,9 +8,9 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center gap-4 mt-10">
-      <MatterDemo ref={ref} width={800} height={600} gravity={0.3} ground >
-        <Bubble shape="circle 12" x={200} y={0} text="Hello" />
-        <Bubble shape="rectangle 40 20" x={300} y={0} text="World" />
+      <MatterDemo ref={ref} width={1024} height={860} gravity={0.3} ground interact>
+        <Bubble shape="circle 60" x={200} y={60} text="Hello" />
+        <Bubble shape="rectangle 300 70" x={300} y={231} text="World" />
       </MatterDemo>
 
       <div className="space-x-2">

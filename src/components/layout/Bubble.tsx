@@ -46,7 +46,7 @@ const Bubble: React.FC<BubbleProps> & {
           width: 80,
           height: 80,
           backgroundColor: style?.backgroundColor || "#60a5fa",
-          color: style?.color || "#fff",
+          color: style?.color || "#000000ff",
           fontWeight: 600,
           position: "absolute",
           transform: "translate(-50%, -50%)",
