@@ -82,6 +82,7 @@ const Main = () => {
   }, []);
   const ref = useRef<BubblesBoardHandle>(null);
   const list = ['furry', 'cpp', 'react', 'pingpong', 'mbti'];
+  const [bubbleSize, setBubbleSize] = React.useState<number[]>(Array.from({ length: list.length }, () => 100));
   return (
     <Container className="" style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }} fluid>
       <Row className="justify-content-center align-items-center" style={{ minHeight: "260px", marginBottom: "2rem" }}>
@@ -176,9 +177,9 @@ const Main = () => {
         <Col className="d-flex justify-content-center align-items-center">
           <MatterDemo ref={ref} width={1200} height={600} gravity={0.3} ground interact backgroundColor={theme === 'light' ? '#e8faa2ff' : '#002b13ff'}>
             {list.map((item, index) => (
-              <Bubble key={index} shape="circle 100" x={200 + index * 100} y={60} text={t(`mainpage.bubbles.${item}`)}
+              <Bubble key={index} shape={`circle ${bubbleSize[index]}`} x={200 + index * 100} y={60} text={t(`mainpage.bubbles.${item}`)}
                 style={{ backgroundColor: theme === 'light' ? '#00eb79ff' : '#00796b' }}
-
+                onClick={() => setBubbleSize(prev => prev.map((size, i) => i === index ? size + 10 : size))}
               />
             ))}
           </MatterDemo>

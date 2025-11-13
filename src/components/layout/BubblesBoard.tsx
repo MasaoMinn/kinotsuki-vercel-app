@@ -271,7 +271,7 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
           zIndex: 1
         }}
       >
-        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2, pointerEvents: 'none' }}>
+        <div className="absolute inset-0" style={{ zIndex: 2, pointerEvents: 'none' }}>
           {bubbles.map(({ id, body, props }) => {
             let bubbleWidth: number;
             let bubbleHeight: number;
@@ -292,7 +292,8 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
             return (
               <div
                 key={id}
-                className="absolute"
+                className="absolute cursor-pointer"
+                onClick={props.onClick}
                 style={{
                   left: `${x}px`,
                   top: `${y}px`,

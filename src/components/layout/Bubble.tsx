@@ -8,7 +8,6 @@ export interface BubbleProps extends React.HTMLAttributes<HTMLDivElement> {
   shape: string;
   text?: string;
   image?: string;
-  // 移除style和className，因为它们已经在HTMLAttributes中定义了
 
   x: number;
   y: number;
@@ -32,7 +31,6 @@ const Bubble: React.FC<BubbleProps> & {
 } = ({
   text,
   image,
-  // 使用剩余参数收集所有HTML div props
   ...divProps
 }) => {
     // 从divProps中解构出style和className，因为我们需要合并它们
