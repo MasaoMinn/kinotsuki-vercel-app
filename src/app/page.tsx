@@ -8,6 +8,9 @@ import Experience from "@/components/layout/Experience";
 import axios from "axios";
 import { getLikesResponse } from "@/app/api/utils/types/likes";
 import ThumbVote from '@/components/boxed/ThumbVote';
+import Bubble from "@/components/layout/Bubble";
+import MatterDemo, { BubblesBoardHandle } from "@/components/layout/BubblesBoard";
+import { useRef } from "react";
 const Introduction = () => {
   const { t } = useTranslation();
   const { theme } = useTheme();
@@ -77,13 +80,10 @@ const Main = () => {
       })
     }
   }, []);
+  const ref = useRef<BubblesBoardHandle>(null);
+  const list = ['furry', 'cpp', 'react', 'pingpong', 'mbti'];
   return (
     <Container className="" style={theme === 'light' ? { ...lightTheme } : { ...darkTheme }} fluid>
-      <Row>
-        <Col xs={12} md={8} className="d-flex justify-content-center align-items-center">
-
-        </Col>
-      </Row>
       <Row className="justify-content-center align-items-center" style={{ minHeight: "260px", marginBottom: "2rem" }}>
         <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
           <Image
@@ -170,6 +170,32 @@ const Main = () => {
               <ThumbVote id={5} likes={thumbsData[4].data.like} dislikes={thumbsData[4].data.dislike} hasStorageAccess={hasStorageAccess} setThumbsData={setThumbsData} />
             </div>
           </Stack>
+        </Col>
+      </Row>
+      <Row>
+        <Col className="d-flex justify-content-center align-items-center">
+          <MatterDemo ref={ref} width={1200} height={600} gravity={0.3} ground interact backgroundColor={theme === 'light' ? '#e8faa2ff' : '#002b13ff'}>
+            {list.map((item, index) => (
+              <Bubble key={index} shape="circle 100" x={200 + index * 100} y={60} text={t(`mainpage.bubbles.${item}`)}
+                style={{ backgroundColor: theme === 'light' ? '#00eb79ff' : '#00796b' }}
+
+              />
+            ))}
+          </MatterDemo>
+
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <div className="space-x-2 d-flex justify-content-center align-items-center">
+            <Button
+              onClick={() => ref.current?.reset()}
+              className="px-3 py-1 bg-blue-500 rounded"
+              variant={theme}
+            >
+              🔄 Reset Animation
+            </Button>
+          </div>
         </Col>
       </Row>
     </Container>

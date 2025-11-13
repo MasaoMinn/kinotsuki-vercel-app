@@ -3,12 +3,12 @@ import { parseBubbleShape } from "@/utils/bubbleShapeParser";
 import { Bodies, Body, IChamferableBodyDefinition } from "matter-js";
 import Image from "next/image";
 
-export interface BubbleProps {
+// 修改BubbleProps接口，让它继承div元素的props
+export interface BubbleProps extends React.HTMLAttributes<HTMLDivElement> {
   shape: string;
   text?: string;
   image?: string;
-  style?: React.CSSProperties;
-  className?: string;
+  // 移除style和className，因为它们已经在HTMLAttributes中定义了
 
   x: number;
   y: number;
@@ -32,11 +32,12 @@ const Bubble: React.FC<BubbleProps> & {
 } = ({
   text,
   image,
-  style,
-  className,
-  x = 0,
-  y = 0,
+  // 使用剩余参数收集所有HTML div props
+  ...divProps
 }) => {
+    // 从divProps中解构出style和className，因为我们需要合并它们
+    const { style, className, x = 0, y = 0, ...otherDivProps } = divProps;
+
     return (
       <div
         className={`absolute flex items-center justify-center text-center select-none ${className || ""}`}
@@ -52,6 +53,7 @@ const Bubble: React.FC<BubbleProps> & {
           transform: "translate(-50%, -50%)",
           ...style,
         }}
+        {...otherDivProps} // 传递剩余的div props
       >
         {image ? (
           <Image

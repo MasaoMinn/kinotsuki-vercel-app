@@ -33,7 +33,7 @@ export interface BubblesBoardHandle {
 export interface BubblesBoardProps {
   width?: number;
   height?: number;
-  background?: string;
+  backgroundColor?: string;
   wireframes?: boolean;
   autoRun?: boolean;
   className?: string;
@@ -51,7 +51,7 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
     {
       width = 800,
       height = 600,
-      background = "#f8fafc",
+      backgroundColor: background = "#f8fafc",
       wireframes = false,
       autoRun = true,
       className = "",
@@ -91,7 +91,8 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
         render.canvas.style.left = '0';
         render.canvas.style.margin = '0';
         render.canvas.style.padding = '0';
-        render.canvas.style.zIndex = '10';
+        // 修改：移除或降低zIndex，确保不会覆盖导航栏
+        // render.canvas.style.zIndex = '10';
       }
       const runner = Runner.create();
 
@@ -261,9 +262,16 @@ const BubblesBoard = forwardRef<BubblesBoardHandle, BubblesBoardProps>(
       <div
         ref={containerRef}
         className={`relative overflow-hidden rounded-xl border shadow ${className}`}
-        style={{ width, height }}
+        style={{
+          width,
+          height,
+          // 添加：确保容器有相对定位，让绝对定位的子元素在其内部定位
+          position: 'relative',
+          // 添加：确保组件不会覆盖其他元素
+          zIndex: 1
+        }}
       >
-        <div className="absolute inset-0 z-20 pointer-events-none" style={{ zIndex: 20, pointerEvents: 'none' }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 2, pointerEvents: 'none' }}>
           {bubbles.map(({ id, body, props }) => {
             let bubbleWidth: number;
             let bubbleHeight: number;

@@ -67,6 +67,14 @@ i18n
               tobe: 'Stay Tuned',
               furry: 'Contact Me'
             },
+            bubbles: {
+              furry: 'Furry',
+              cpp: 'C++',
+              react: 'React.js',
+              pingpong: 'Table Tennis',
+              mbti: 'INTP',
+
+            },
             oi: {
               label: 'OI-ACM',
               title: 'My OI-ACM Career (2020/9-2025/9)',
@@ -182,6 +190,13 @@ i18n
               tobe: '敬请期待',
               furry: 'LXFS'
             },
+            bubbles: {
+              furry: '福瑞控',
+              cpp: 'C++',
+              react: 'React.js',
+              pingpong: '乒乓球',
+              mbti: 'INTP',
+            },
             oi: {
               label: 'OI-ACM',
               title: "OI-ACM生涯 (2020/9-2025/9)",
@@ -276,7 +291,6 @@ i18n
             like_message: 'バトンをぐっと押さないでください。',
             dislike_title: '私には改善の余地があります。',
             dislike_message: '改善の余地がある場合は、メッセージを送ってください。',
-
           },
           mainpage: {
             title: 'Sunny_湛月 - ポートフォリオ',
@@ -296,6 +310,13 @@ i18n
               description: '役に立つ工具',
               tobe: '乞うご期待',
               furry: '連絡先'
+            },
+            bubbles: {
+              furry: 'ケモノ好き',
+              cpp: 'C++',
+              react: 'React.js',
+              pingpong: '卓球',
+              mbti: 'INTP',
             },
             oi: {
               label: 'アルゴリズムコンテストについて',
