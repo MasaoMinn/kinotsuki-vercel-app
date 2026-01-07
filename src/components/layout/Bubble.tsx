@@ -1,5 +1,5 @@
 "use client";
-import { parseBubbleShape } from "@/utils/bubbleShapeParser";
+import { parseBubbleShape } from "@/app/utils/bubbleShapeParser";
 import { Bodies, Body, IChamferableBodyDefinition } from "matter-js";
 import Image from "next/image";
 

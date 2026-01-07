@@ -1,3 +1,3 @@
-# This is personal website deployed on [Vercel](https://vercel.com/ "Vercel")
+# This is personal website deployed on **Github Page**
 
-[website](https://kinotsuki.vercel.app/ "website")
+For complete interaction, please visit [velcel page](https://kinotsuki.vercel.app/)

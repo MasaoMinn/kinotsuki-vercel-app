@@ -1,8 +1,3 @@
-/*
-  封装的ThemeContext组件，提供主题，实现主题切换功能
-  2025-04-07
-  by MasaoMinn
-*/
 "use client";
 
 import {
@@ -10,106 +5,142 @@ import {
   useContext,
   useState,
   useEffect,
+  useLayoutEffect,
   ReactNode,
   useCallback,
 } from "react";
+import { useLocalStorageStore } from "@/store/LocalStorageStore";
 
-// 类型定义
+/* ================= types ================= */
+
 type Theme = "light" | "dark";
+
 type ThemeContextType = {
   theme: Theme;
+  currentTheme: number;
   toggleTheme: () => void;
+  nextTheme: () => void;
+  prevTheme: () => void;
+  setThemeIndex: (index: number) => void;
 };
 
-// Context 定义
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+/* ================= theme data ================= */
 
-// 自定义 Hook 确保使用安全
+export const darkTheme = [
+  { backgroundColor: "#1f1f1fff", color: "#EEEEFE", borderColor: "#000274ff", extraColor: "#d7f5edff" },
+  { backgroundColor: "#003c11ff", color: "#e8ffe1ff", borderColor: "#260048ff", extraColor: "#cccfffff" },
+  { backgroundColor: "#540000ff", color: "#dffff5ff", borderColor: "#002139ff", extraColor: "#fff5ccff" },
+];
+
+export const lightTheme = [
+  { backgroundColor: "#EEEEEE", color: "#000000", borderColor: "#b68989ff", extraColor: "#863030ff" },
+  { backgroundColor: "#e6ff80ff", color: "#260048ff", borderColor: "#61b879ff", extraColor: "#292993ff" },
+  { backgroundColor: "#c5ffd5ff", color: "#2d0028ff", borderColor: "#d0d063ff", extraColor: "#184b88ff" },
+];
+
+/* ================= context ================= */
+
+const ThemeContext = createContext<ThemeContextType | null>(null);
+
 export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+  const ctx = useContext(ThemeContext);
+  if (!ctx) {
+    throw new Error("useTheme must be used within ThemeProvider");
   }
-  return context;
+  return ctx;
 };
 
-export const darkTheme = {
-  backgroundColor: '#1C1C1C',
-  color: '#EEEEFE',
-  borderColor: '#0000FF',
-};
-
-export const lightTheme = {
-  backgroundColor: '#EEEEEE',
-  color: '#000000',
-  borderColor: '#FF0000',
-};
+/* ================= provider ================= */
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  // 获取初始主题（优先 localStorage > 系统主题 > 默认 light）
-  const getInitialTheme = useCallback((): Theme => {
-    try {
-      // 优先从 localStorage 获取
-      const storedTheme = localStorage.getItem("theme") as Theme | null;
-      if (storedTheme === "light" || storedTheme === "dark") {
-        return storedTheme;
-      }
-      // 检测系统主题
-      const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      return systemDark ? "dark" : "light";
-    } catch (e) {
-      // 回退
-      console.log(e);
-      return "light";
-    }
+  /** ⚠️ 初始值不要读 localStorage */
+  const [theme, setTheme] = useState<Theme>("light");
+  const [currentTheme, setCurrentTheme] = useState(0);
+  const [hydrated, setHydrated] = useState(false);
+
+  /* ===== 首次 hydration：统一初始化 ===== */
+  useEffect(() => {
+    const store = useLocalStorageStore.getState();
+
+    const storedTheme = store.getThemeCookie();
+    const resolvedTheme: Theme =
+      storedTheme === "dark" || storedTheme === "light" ? storedTheme : "light";
+
+    const storedIndex = parseInt(store.getThemeIndexCookie() ?? "0", 10);
+    const themeArray = resolvedTheme === "dark" ? darkTheme : lightTheme;
+
+    setTheme(resolvedTheme);
+    setCurrentTheme(
+      Number.isNaN(storedIndex)
+        ? 0
+        : Math.min(Math.max(0, storedIndex), themeArray.length - 1)
+    );
+
+    setHydrated(true);
   }, []);
 
-  const [theme, setTheme] = useState<Theme>(getInitialTheme());
+  /* ===== DOM 同步（避免闪屏） ===== */
+  useLayoutEffect(() => {
+    if (!hydrated) return;
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme, hydrated]);
 
-  // 不再从 cookie 同步 theme
+  /* ================= actions ================= */
 
-  // 切换主题方法
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {
-      const newTheme = prev === "light" ? "dark" : "light";
-      try {
-        localStorage.setItem("theme", newTheme);
-      } catch (e) {
-        console.warn(e);
-      }
-      return newTheme;
+      const next = prev === "light" ? "dark" : "light";
+      useLocalStorageStore.getState().setThemeCookie(next);
+      return next;
     });
+    setCurrentTheme(0);
   }, []);
 
-  // 监听系统主题变化（仅在未手动设置时响应）
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      try {
-        // 如果 localStorage 中不存在手动设置的主题，则跟随系统
-        if (!localStorage.getItem("theme")) {
-          setTheme(e.matches ? "dark" : "light");
-        }
-      } catch (e) {
-        console.log(e);
-        // 忽略 localStorage 错误
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleSystemThemeChange);
-    return () => {
-      mediaQuery.removeEventListener("change", handleSystemThemeChange);
-    };
-  });
-
-  // 同步主题到 DOM（可结合 CSS 自定义属性使用）
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
+  const nextTheme = useCallback(() => {
+    setCurrentTheme((prev) => {
+      const arr = theme === "dark" ? darkTheme : lightTheme;
+      const next = (prev + 1) % arr.length;
+      useLocalStorageStore.getState().setThemeIndexCookie(String(next));
+      return next;
+    });
   }, [theme]);
 
+  const prevTheme = useCallback(() => {
+    setCurrentTheme((prev) => {
+      const arr = theme === "dark" ? darkTheme : lightTheme;
+      const next = (prev - 1 + arr.length) % arr.length;
+      useLocalStorageStore.getState().setThemeIndexCookie(String(next));
+      return next;
+    });
+  }, [theme]);
+
+  const setThemeIndex = useCallback(
+    (index: number) => {
+      const arr = theme === "dark" ? darkTheme : lightTheme;
+      const safe = Math.min(Math.max(0, index), arr.length - 1);
+      setCurrentTheme(safe);
+      useLocalStorageStore.getState().setThemeIndexCookie(String(safe));
+    },
+    [theme]
+  );
+
+  /* ================= render ================= */
+
+  if (!hydrated) {
+    return null; // 或 Skeleton，彻底避免不一致
+  }
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider
+      value={{
+        theme,
+        currentTheme,
+        toggleTheme,
+        nextTheme,
+        prevTheme,
+        setThemeIndex,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

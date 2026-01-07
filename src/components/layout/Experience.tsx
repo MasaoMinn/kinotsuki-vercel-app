@@ -8,13 +8,13 @@ type ExperienceProps = AccordionProps & {
 }
 
 const Experience: React.FC<ExperienceProps> = (props) => {
-  const { theme } = useTheme();
+  const { theme, currentTheme } = useTheme();
   const { t } = useTranslation();
   const timeline = t(`mainpage.${props.type.toLowerCase()}.timeline`, { returnObjects: true }) as string[];
-  const headerStyle = theme === 'light' ? { ...lightTheme } : { ...darkTheme };
+  const headerStyle = theme === 'light' ? { ...lightTheme[currentTheme] } : { ...darkTheme[currentTheme] };
   return (
     <Accordion {...props}>
-      <Accordion.Item eventKey="0" style={theme == 'light' ? { ...lightTheme } : { ...darkTheme }}>
+      <Accordion.Item eventKey="0" style={theme == 'light' ? { ...lightTheme[currentTheme] } : { ...darkTheme[currentTheme] }}>
         <Accordion.Header style={headerStyle}>
           <span>{t(`mainpage.${props.type.toLowerCase()}.title`)}</span>
         </Accordion.Header>

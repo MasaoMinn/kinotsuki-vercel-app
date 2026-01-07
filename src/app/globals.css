@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: var(--font-kiwi-maru);
+}
+
+body {
+  font-family: var(--font-sans);
+}
+pre code.hljs {
+  background: transparent !important;
+}

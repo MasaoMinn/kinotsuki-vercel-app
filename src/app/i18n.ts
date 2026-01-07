@@ -54,19 +54,6 @@ i18n
             about: 'About',
             seeme: 'See me on Github',
             theme: 'Theme',
-            minigame: {
-              title: 'Minigame',
-              description: 'H5 games written in JS .',
-              bwite: 'Black-White Iteration',
-              color: 'My Sense Of Color Is Amazing',
-              light: 'Light On The Lights(Two-player Battle)',
-            },
-            tools: {
-              title: 'Tools',
-              description: 'Useful tools',
-              tobe: 'Stay Tuned',
-              furry: 'Contact Me'
-            },
             bubbles: {
               furry: 'Furry',
               cpp: 'C++',
@@ -177,19 +164,6 @@ i18n
             about: '关于',
             seeme: '我的 Github',
             theme: '主题',
-            minigame: {
-              title: '小游戏',
-              description: '这里是我写的一些H5小游戏。',
-              bwite: '黑白迭代',
-              color: '我色感贼6',
-              light: '点灯新世界(双人游戏)'
-            },
-            tools: {
-              title: '工具',
-              description: '这里是我写的一些工具。',
-              tobe: '敬请期待',
-              furry: 'LXFS'
-            },
             bubbles: {
               furry: '福瑞控',
               cpp: 'C++',
@@ -298,19 +272,6 @@ i18n
             about: '私について',
             seeme: 'Github',
             theme: '色気',
-            minigame: {
-              title: 'ゲーム',
-              description: 'ここは私が書いたゲームです。',
-              bwite: '黒白の交替',
-              color: '私の色感覚が最高だ',
-              light: '電気をつける挑戦(二人のゲーム)',
-            },
-            tools: {
-              title: '工具',
-              description: '役に立つ工具',
-              tobe: '乞うご期待',
-              furry: '連絡先'
-            },
             bubbles: {
               furry: 'ケモノ好き',
               cpp: 'C++',
