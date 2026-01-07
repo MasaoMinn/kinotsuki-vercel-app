@@ -18,9 +18,15 @@
     "i18next-browser-languagedetector": "^8.2.0",
     "lucide-react": "^0.544.0",
     "matter-js": "^0.20.0",
+<<<<<<< HEAD
     "motion": "^12.23.26",
     "next": "^16.0.10",
     "react": "^19.2.3",
+=======
+    "motion": "^12.23.24",
+    "next": "16.0.10",
+    "react": "^19.2.0",
+>>>>>>> ffed5ab5c5d596183e8a4763a1165c061fcd7d48
     "react-bootstrap": "^2.10.9",
     "react-dom": "^19.2.3",
     "react-i18next": "^15.7.3",
